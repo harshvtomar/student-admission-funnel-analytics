@@ -1,0 +1,2 @@
+# Reproducible data
+Run `python -m src.pipeline` at repository root. It creates `institutions.csv.gz`, `campaigns.csv.gz`, `leads.csv.gz`, `events.csv.gz`, `enrollments.csv.gz` and `admissions.sqlite` here. Compressed CSVs are included; the derived SQLite file is ignored by git; `manifest.json` records seed, snapshot, counts and canonical CSV SHA256 hashes. No external data download is needed. Dashboard first-run generation works without these files.

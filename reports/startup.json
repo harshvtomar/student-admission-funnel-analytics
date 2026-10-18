@@ -1,0 +1,6 @@
+{
+  "status": 200,
+  "body": "ok",
+  "port": 8517,
+  "check": "real Streamlit HTTP startup"
+}

@@ -1,0 +1,18 @@
+{
+  "seed": 20261018,
+  "as_of": "2025-12-31 23:59:59",
+  "counts": {
+    "institutions": 24,
+    "campaigns": 120,
+    "leads": 50000,
+    "events": 79321,
+    "enrollments": 5627
+  },
+  "canonical_csv_sha256": {
+    "institutions": "852af55bb7ebc24556d7d544262e58850d586454f4f6b7c5dd926ddca94fefda",
+    "campaigns": "4fa6a11e3455a8121a8d8a47fc32632413505973f68d88bea5b0c4f37a20b006",
+    "leads": "1f0edfa3c111d25a263a529eb4e2dbf6d7f7c5bbc12b985f32161b5c68b7c009",
+    "events": "16d9a99038b156140d5f94cab369ad1b81dbfa75b726be384ea42fe47f62ecc7",
+    "enrollments": "36a3d7f804ea02ef42549a380afa7b8676661d5e4f98f050e357ebc04e8117ac"
+  }
+}

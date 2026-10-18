@@ -1,0 +1,2 @@
+-- Only complete 90-day-mature campaign-months; minimum 100 leads; zero enrollments flagged explicitly.
+WITH mature AS (SELECT * FROM campaign_performance WHERE julianday('2025-12-31 23:59:59')-julianday(end_date)>=91), benchmark AS (SELECT SUM(actual_spend)/NULLIF(SUM(enrolled),0) cpe FROM mature) SELECT m.* FROM mature m CROSS JOIN benchmark b WHERE leads>=100 AND (enrolled=0 OR m.cpe>1.5*b.cpe) ORDER BY actual_spend DESC;

@@ -1,0 +1,1 @@
+"""AdmissionFlow Intelligence analytics package."""

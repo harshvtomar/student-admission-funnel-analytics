@@ -1,0 +1,24 @@
+{
+  "headline_controls": [
+    18938788.13000001,
+    50000,
+    13792,
+    5627,
+    3365.6989745868154,
+    0.11254,
+    0.8941616492757469
+  ],
+  "base_modeled_enrollments": 377.7969887868409,
+  "scenario_sensitivity": "passed",
+  "infeasible_constraints": "passed",
+  "sheets": [
+    "Executive",
+    "Campaigns",
+    "Channels",
+    "Funnel",
+    "Institutions",
+    "Geography",
+    "Scenarios",
+    "Guide"
+  ]
+}

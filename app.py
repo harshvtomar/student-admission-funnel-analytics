@@ -8,6 +8,8 @@ from src.database import load_tables
 from src.generate import generate
 from src.metrics import select,kpis,campaign_performance,segment_performance,funnel
 from src.recommendations import recommendations
+from src.budget import historical_inputs, allocate, scenario_outputs, SCENARIOS
+from src.client_reports import institution_report, report_bundle
 
 st.set_page_config(page_title='AdmissionFlow Intelligence',page_icon='🎓',layout='wide')
 st.markdown('''<style>
@@ -17,8 +19,9 @@ st.markdown('''<style>
 </style>''',unsafe_allow_html=True)
 @st.cache_data
 def data():
-    path=Path(__file__).parent/'data/admissions.sqlite'
-    return load_tables(path) if path.exists() else generate()
+    # The SQLite file is a derived analysis cache, not the dashboard source.
+    # Deterministic generation avoids stale/corrupted cache failures on deployment.
+    return generate()
 
 def money(v):
     if pd.isna(v): return 'N/A'
@@ -98,6 +101,12 @@ elif page=='University Client Performance':
     p=segment_performance(c,l,'institution_id').merge(t['institutions'][['institution_id','institution_name']],left_on='segment',right_on='institution_id')
     chart(px.bar(p.sort_values('enrolled'),x='enrolled',y='institution_name',orientation='h',title='Institution enrollments',height=700))
     table(p,'institution_performance')
+    st.subheader('Export a client performance report')
+    report_id=st.selectbox('Report institution',p.institution_id.tolist(),format_func=lambda x: t['institutions'].set_index('institution_id').loc[x,'institution_name'])
+    html,_=institution_report(t,c,l,report_id)
+    st.caption('Exports respect the current sidebar filters. HTML opens in a browser and supports Print → Save as PDF.')
+    st.download_button('Download institution report (HTML)',html,report_id+'_report.html','text/html')
+    st.download_button('Download report and scorecard (ZIP)',report_bundle(t,c,l,report_id),report_id+'_report.zip','application/zip')
 elif page=='Geographic & Cohort Analytics':
     g=segment_performance(c,l,'geographic_market')
     chart(px.bar(g,x='segment',y='lead_to_enrollment',hover_data=['leads','enrolled'],title='Territory conversion · fictional population'))
@@ -118,6 +127,28 @@ else:
                 st.markdown(f'**{r.segment} · Investigate**')
                 st.write(r.evidence); st.caption(r.action)
         table(rec,'growth_recommendations')
-    st.warning('Associations do not establish causal impact. Validate any change through controlled testing; this is not an automatic budget optimizer.')
+    st.warning('Associations do not establish causal impact. Validate any change through controlled testing.')
+    st.subheader('Fixed-budget scenario planner')
+    st.write('Uses mature historical channel efficiency from the selected scope. The rule allocates funds to lower historical CPE first, within your limits. It assumes constant efficiency and no channel interaction or saturation; modeled volumes are planning arithmetic, not forecasts or incremental lift.')
+    history=historical_inputs(c,l)
+    a,b,d=st.columns(3)
+    total=a.number_input('Hypothetical budget (INR)',min_value=1.0,value=1000000.0,step=10000.0)
+    floor=b.number_input('Minimum share per eligible channel (%)',min_value=0.0,max_value=100.0,value=5.0,step=1.0)
+    cap=d.number_input('Maximum share per eligible channel (%)',min_value=0.0,max_value=100.0,value=25.0,step=1.0)
+    case=st.selectbox('Cost scenario',list(SCENARIOS),index=1)
+    factor=st.number_input('Assumed cost multiplier',min_value=0.01,value=SCENARIOS[case],step=0.05,key='multiplier_'+case,help='Conservative 1.25 means unit costs 25% above history; optimistic 0.85 means 15% below history. These are assumptions, not estimated effects.')
+    if not history.empty:
+        table(history,'budget_historical_inputs')
+        st.caption('Eligibility: ≥100 leads, positive spend and at least one enrollment. Ineligible channels receive no modeled allocation. Current allocation is historical budget share within the mature scope.')
+    try:
+        allocation=allocate(history,total,floor/100,cap/100)
+        planned=scenario_outputs(allocation,factor)
+        chart(px.bar(planned,x='segment',y='recommended_budget',title='Hypothetical allocation · INR'))
+        table(planned,'budget_scenario')
+        comparison=pd.DataFrame([{'scenario':name,'cost_multiplier':mult,'modeled_enrollments':scenario_outputs(allocation,mult).modeled_enrollments.sum()} for name,mult in SCENARIOS.items()])
+        table(comparison,'scenario_comparison')
+        st.caption('A common cost multiplier changes modeled volumes, not the allocation ranking. Fractional volumes are expected-equivalent arithmetic, not promised students. Historical selection and capacity constraints require business validation.')
+    except ValueError as error:
+        st.warning(str(error))
 with st.expander('Metric definitions and reporting rules'):
     st.markdown('''All filters select complete campaign-months. Spend, impressions and clicks are summed once per campaign. Leads have a single primary campaign. Applications mean **completed applications** unless marked started. Outcomes include events up to 31 Dec 2025 for the selected acquired leads, including events after campaign end. Zero denominators display N/A. Maturity means at least 90 days since acquisition; complete-campaign maturity uses a conservative 91-day end-date rule. Application-start rate = starts / qualified; completion rate = completed / started; lead-to-application = completed / leads; application-to-enrollment = enrollments / completed. No tuition ROI is calculated.''')

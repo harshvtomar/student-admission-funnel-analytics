@@ -3,6 +3,10 @@
 
 **CampusGrowth Analytics · Portfolio simulation · Python / SQL / Streamlit**
 
+**[Open the live application](https://student-admission-funnel-analytics.streamlit.app/)** — deployed on Streamlit Community Cloud with Python 3.12; verified loading on 18 October 2026.
+
+![Executive dashboard](screenshots/executive-desktop.jpg)
+
 A reproducible decision-support platform for a fictional Indian higher-education marketing organization. Follow students from acquisition through enrollment, compare campaign costs without double-counting spend, and build an evidence-backed investigation queue for a marketing management review.
 
 **All students, institutions, commercial values and outcomes are synthetic. This is not KollegeApply data, a client engagement, an empirical channel benchmark, or evidence of causal marketing uplift.** No student identities or contact information are included.
@@ -25,7 +29,7 @@ python -m src.pipeline
 streamlit run app.py
 ```
 
-The pipeline recreates compressed CSV tables, a constrained SQLite database, validation diagnostics, all 12 SQL reports and KPI/recommendation exports. Compressed CSV tables, the deterministic generator and canonical CSV hashes are versioned. The derived SQLite database is rebuilt locally. On first launch without a local database, the dashboard generates and caches the same simulation automatically. The generated files contain no real personal information.
+The pipeline recreates compressed CSV tables, a constrained SQLite database, validation diagnostics, all 12 SQL reports and KPI/recommendation exports. Compressed CSV tables, the deterministic generator and canonical CSV hashes are versioned. The derived SQLite database is rebuilt locally. The dashboard generates and caches the same simulation directly, avoiding stale or damaged local database caches. The generated files contain no real personal information.
 
 ## Dataset and provenance
 - Fixed seed **20261018**, 50,000 unique synthetic students, 24 fictional institutions, 120 monthly campaigns, 8 markets, 7 channels.
@@ -56,9 +60,9 @@ flowchart TD
 2. **Student Admission Funnel:** unique-student stages, stage gaps and geography filtering; aggregate reach explicitly separated.
 3. **Campaign Performance:** cost/conversion scatter and downloadable campaign scorecards.
 4. **Marketing Channel Analytics:** costs and conversion across seven acquisition channels.
-5. **University Client Performance:** institution enrollment and efficiency tables.
+5. **University Client Performance:** institution enrollment and efficiency tables, plus filtered HTML reports and ZIP report/CSV packs.
 6. **Geographic & Cohort Analytics:** territory conversion and cohort follow-up maturity.
-7. **Growth Recommendations:** reproducible campaign investigation queue with supporting metrics and controlled-test suggestions.
+7. **Growth Recommendations:** reproducible campaign investigation queue and a constrained fixed-budget planner with mature historical unit costs and editable scenario assumptions.
 
 Sidebar filters cover complete campaign months, institution, channel, campaign and fully mature cohorts. Empty selections have defined behavior. INR labels, tooltips and CSV downloads are included.
 
@@ -91,6 +95,15 @@ Independent arithmetic fixtures, adversarial data mutations, foreign-key enforce
 - Enrollment records represent confirmations only. Declines, withdrawals, rejections and refunds are not modeled separately; absent progression does not imply permanent rejection.
 - Exact duplicate repair is available, but conflicting IDs require explicit resolution rather than silent deletion. The shipped seed is clean.
 - SQLite uses floating-point INR amounts rounded to two decimals; calculations are reconciled within floating-point tolerance, not accounting-grade decimal arithmetic.
-- Excel reporting, institution packs, leadership deck, advanced budget experiments, public deployment, browser visual QA and accessibility review are Session 2 work.
+- Budget planning assumes constant historical efficiency, not incremental causal returns. Full accessibility certification, real CRM integration and experimentally estimated response curves remain future work.
+
+## Business reporting deliverables
+
+- [Excel business workbook](reports/session2/AdmissionFlow_Business_Report.xlsx): executive controls, campaigns, channels, funnel, institutions, geography, editable scenarios and a guide; 904 formulas and six charts.
+- [Leadership presentation](reports/session2/AdmissionFlow_Leadership.pptx) and [PDF](reports/session2/AdmissionFlow_Leadership.pdf): ten slides with editable charts in the PPTX.
+- [Executive management report](reports/session2/EXECUTIVE_REPORT.md) and [24 institution report packs](reports/session2/institutions).
+- [Budget methodology](docs/BUDGET_METHODOLOGY.md), [refresh instructions](docs/REPORT_REFRESH.md), [interview guide and resume bullets](docs/INTERVIEW_GUIDE.md), and [delivery verification](docs/DELIVERY_STATUS.md).
+
+Run `python -m src.export_business` to regenerate reporting inputs and institution packs. Excel and slide builders use the separately documented artifact-authoring runtime; this is not a dependency of the deployed application. The default ₹10 lakh scenario yields 302.2 / 377.8 / 444.5 modeled enrollment equivalents under assumed cost multipliers 1.25 / 1.00 / 0.85. These are planning calculations, not forecasts.
 
 Continue from [NEXT_SESSION_PROMPT.md](NEXT_SESSION_PROMPT.md). Do not rebuild or modify unrelated repositories.

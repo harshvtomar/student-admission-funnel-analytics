@@ -3,7 +3,7 @@
 
 **CampusGrowth Analytics · Portfolio simulation · Python / SQL / Streamlit**
 
-**[Open the live application](https://student-admission-funnel-analytics.streamlit.app/)** — deployed on Streamlit Community Cloud with Python 3.12; verified loading on 18 October 2026.
+**[Open the live application](https://student-admission-funnel-analytics.streamlit.app/)** — deployed on Streamlit Community Cloud with Python 3.12; verified loading and updated features on 19 October 2026.
 
 ![Executive dashboard](screenshots/executive-desktop.jpg)
 

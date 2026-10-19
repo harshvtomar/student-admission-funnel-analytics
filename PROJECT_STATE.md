@@ -1,31 +1,20 @@
-# Project state — Session 1
+# Project state — Session 2
 
 Repository: https://github.com/harshvtomar/student-admission-funnel-analytics
-Branch: `main`
-Validated application commit: `2fefaa4587174192fa53efc5c5b6be1e6d44f311`
-This checkpoint is a documentation-only descendant of that commit. Obtain its exact current SHA with `git rev-parse HEAD` or the GitHub branch reference; a commit cannot contain its own hash.
+Branch: main
+Application/report checkpoint: `a9c04d2b6b1a778af8d9338af47fe0dccad294ec`.
+This handoff commit is a documentation/evidence descendant; obtain its SHA with `git rev-parse HEAD`.
 
-## Completed
-- Deterministic five-table simulation, constrained SQLite schema, two analytical views and 12 documented SQL queries.
-- Separate generator, validation, database, KPI, recommendations and presentation modules.
-- Seven functional Streamlit workspaces, filters, Plotly charts, INR cards, CSV downloads and empty states.
-- Single primary campaign attribution; explicit grain separation; mature-cohort controls; deterministic evidence-backed recommendations.
-- Complete README, provenance, data dictionary, analytical methodology, SQL guide and management review.
-- Public GitHub repository, compressed CSV tables and manifest, test/validation reports, GitHub Actions workflow.
+Live app: https://student-admission-funnel-analytics.streamlit.app/
 
-## Dataset
-Seed 20261018. Calendar 2025 campaigns; as-of 2025-12-31 23:59:59.
-24 institutions; 120 campaigns; 50,000 leads; 79,321 achieved events; 5,627 enrollment confirmations; eight markets; seven channels.
+Completed: Session 1 analytics preserved; seven deployed pages; mature-channel budget scenarios; institution HTML and CSV/ZIP exports; eight-tab Excel workbook; ten-slide editable deck and PDF; executive report; interview guide; screenshots; refresh and delivery documentation.
 
-## Verified locally
-`python -m src.pipeline`: passed, no diagnostic errors.
-`python -m pytest -q --junitxml=reports/pytest.xml`: **57 passed, 0 failed**, 16.89 seconds.
-Includes all seven pages via Streamlit AppTest and arithmetic/SQL reconciliation.
-Real Streamlit HTTP health endpoint: **200 / ok**.
-GitHub Actions workflow is committed; inspect the live run for hosted status, which may finish after this checkpoint.
+Dataset: fixed seed 20261018, 2025 acquisition, snapshot 31 December 2025. 50,000 leads, 24 institutions, 120 campaigns, 79,321 events, 5,627 enrollments, eight markets and seven channels. All synthetic.
 
-## Known limitations
-Fully synthetic data; no empirical effectiveness/market-demand/ROI claims. Observed-to-date recent cohorts are incomplete. No multi-touch attribution, geographic cost allocation, real CRM ingestion, withdrawals or rejected-outcome modeling. INR uses floating-point values with testing tolerance. Complete browser visual/mobile/accessibility QA is not done. No public app deployment yet. The repository screenshot documents creation, not dashboard visual QA.
+Verification: 69 local tests passed, zero failed, 20.69 seconds. SQL/Python reconciliation and all seven AppTest pages pass. Application commit CI run 39182948308 succeeded. Excel headline and scenario checks pass; 904 formulas/six charts/no cached formula errors. All ten PDF pages inspected. Live app, planner warning and I001 report ZIP verified. Desktop and 390×844 viewport screenshots saved.
 
-## Remaining work
-Session 2: deploy the current app, verify seven pages in a browser, capture genuine dashboard screenshots, produce a formula-backed Excel workbook, institutional CSV/Excel reporting packs and concise leadership presentation. Explore budget scenarios only with explicit hypothetical assumptions and no causal uplift claims. Preserve this repository and do not touch the user's other repositories.
+Deliverables: reports/session2/; scripts/build_workbook.mjs; scripts/build_deck.mjs; docs/INTERVIEW_GUIDE.md. Detailed evidence and limits: docs/DELIVERY_STATUS.md.
+
+Known limits: synthetic associations, incomplete recent cohorts, constant-efficiency scenarios, fixed workbook export ranges, optional artifact-runtime dependency for Office regeneration, no native Microsoft Office or exhaustive accessibility/device testing. Do not present this as actual KollegeApply business results.
+
+Next: optional real CRM integration with consent, controlled experiments, stronger device/accessibility QA and configurable workbook source ranges. No mandatory user action blocks use of the delivered portfolio.
